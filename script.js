@@ -257,7 +257,6 @@ function addCategoryFunctionality(column) {
         // Set the "Add Entry" button's background color from the settings
         const addEntryButton = newCategory.querySelector('.add-entry');
         addEntryButton.style.backgroundColor = tempGlobalTextColor;
-        categoryTitleInput.style.color = tempButtonTextColor;
         addEntryButton.style.color = tempButtonTextColor;
 
         column.querySelector('.categories').insertBefore(newCategory, this);
@@ -265,6 +264,7 @@ function addCategoryFunctionality(column) {
         // Focus the category title input right after adding the new category
         const categoryTitleInput = newCategory.querySelector('.editable-category-title');
         categoryTitleInput.focus();
+        categoryTitleInput.style.color = tempButtonTextColor;
 
         // Set default category name if none is provided when losing focus
         categoryTitleInput.addEventListener('blur', function() {
@@ -2154,11 +2154,17 @@ function applyAllEntriesLimit(limit) {
     }
 }
 
+// --- Temporary save function to not throw errors as it is called in multiple locations for testing purposes --- Delete later -- //
+function saveToLocalStorage() {
+    return;
+}
+
 /* EXPERIMENTAL --- NOT FULLY IMPLEMENTED ---
 ///////////////////////////////// SAVE AND LOAD FROM LOCAL STORAGE FUNCTIONALITY START ////////////////////////////////////
 
 // SAVE
 function saveToLocalStorage() {
+
     const columns = [];
 
     document.querySelectorAll('.column').forEach(column => {
