@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap Project</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Main Header -->
+  <div class="roadmap-header">
+    <h1>EDIT VIEW</h1>
+    <div class="last-updated">Updated: <span id="last-update">Oct. 2nd 2024</span></div>
+  </div>
+
+  <!-- Info Text -->
+  <div class="roadmap-info">
+    <p class="info-last-release">Last Release: 24/09/2024</h3>
+    <p class="info-live-version">Current Live Version: Beta 0.7</h3>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider-top">
+    <hr class="gradient-divider">
+  </div>
+
+  <!-- Control Buttons -->
+  <div class="roadmap-controls">
+    <button id="expand-all">︾ Expand All</button>
+    <button id="collapse-all">︽ Collapse All</button>
+  </div>
+
+  <!-- Sidebar for buttons -->
+  <div class="left-sidebar">
+    <button class="sidebar-button" id="sidebar-button1">
+      <span>Edit View</span>
+    </button>
+    <button class="sidebar-button" id="sidebar-button3">
+      <span>Release View</span>
+    </button>
+    <button class="sidebar-button" id="sidebar-button2">
+      <span>Information</span>
+    </button>
+  </div>
+
+  <!-- Roadmap Columns -->
+  <div class="roadmap">
+    <!-- Add New Column Button -->
+    <button class="add-column">+</button>
+  </div>
+
+<!-- ENTRY MODAL -->
+<div id="entryModal" class="modal" style="display: none;">
+  <!-- Modal Content -->
+  <div class="modal-content">
+      <!-- Close Button -->
+      <span class="close-modal">X</span>
+      
+      <!-- Left Sidebar for Auxiliary Actions -->
+      <div class="modal-sidebar">
+          <button id="addImageButton">📷 Add Image</button>
+          <!-- Image Upload Hidden Input (Needs to be linked to the "Add Image" button) -->
+          <input type="file" id="modalImageUpload" style="display: none;" />
+          <button id="addChecklistButton">📋 Add Checklist</button>
+          <select id="modalCategory" class="dropdown">
+              <option>Category 1</option>
+              <option>Category 2</option>
+          </select>
+      </div>
+
+      <!-- Main Content -->
+      <div class="modal-main-content">
+          <!-- Release Status Header -->
+          <div class="status-ribbon">
+              <span id="modalStatus">RELEASED</span>
+          </div>
+          
+          <!-- Title Input -->
+          <input type="text" id="modalTitle" maxlength="57" placeholder="Entry Title" class="modal-title-input">
+          
+          <!-- Description -->
+          <textarea id="modalDescription" class="modal-description" placeholder="Enter description..."></textarea>
+          
+          <!-- Image Preview and Controls -->
+          <div id="image-section">
+              <img id="modalImagePreview" class="modal-image-preview" src="" alt="Entry Image">
+              <button id="removeImageButton" class="image-remove-btn">X</button>
+          </div>
+          
+          <!-- Checklists Section -->
+          <div id="checklist-section"></div>
+      </div>
+
+      <!-- Save Button -->
+      <button id="saveEntryButton" class="modal-save-btn">Save</button>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div class="modal-overlay" style="display: none;"></div>
+
+<!-- Simple Confirmation Popup -->
+<div id="confirmationPopup" class="confirmation-popup" style="display: none;">
+  <div class="confirmation-popup-content">
+      <p id="confirmationMessage">Are you sure?</p>
+      <div class="popup-buttons">
+          <button id="confirmDelete">Confirm</button>
+          <button id="cancelDelete">Cancel</button>
+      </div>
+  </div>
+</div>
+
+  <!-- Entry Name Popup -->
+  <div id="customModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <span class="close-custom-modal">&times;</span>
+        <p>Enter the name of your entry:</p>
+        <input type="text" id="entryNameInput" placeholder="Entry name (If empty, will autoasign 'Entry Name')" class="custom-modal-input" maxlength="57">
+        <button id="confirmEntry" class="custom-modal-confirm">SET</button>
+    </div>
+</div>
+
+  <!-- Roadmap Info/Caveats Popup -->
+  <div id="roadmapCaveatsPopup" class="modal" style="display: none;">
+    <div class="caveats-modal-content">
+        <!-- Close Button -->
+        <span class="caveats-close-modal">&times;</span>
+        
+        <!-- Modal Header -->
+        <h2>Roadmap: Information</h2>
+        
+        <!-- Modal Body -->
+        <div class="caveats-modal-body">
+          <p>The [Project Name] receives updates on a quarterly basis, and the Release Board's intent is to show the planned features for the next quarter's update. These cards represent a high level of confidence in their release timing, however, these features may still move depending on unforeseen circumstances.</p>
+          <p>Feature Cards are added to the Release Board near the start of the quarter. Once they've been completed for release and the QA process begins, they are marked as Tentative. This label remains until the particular feature undergoes a final review.</p>
+          <p>If it passes its review, it is integrated into the release build and will then be marked as Committed. At this point, it is nearly certain that the feature will arrive with its corresponding update. Once the feature has been released, its status is then updated to Released.</p>
+
+          <h3>Deliverable Labels</h3>
+          <ul>
+              <li><strong>Tentative:</strong> This deliverable is tentatively scheduled for the specific quarter, but hasn't gone through the review process and may shift around on the Roadmap.</li>
+              <li><strong>Committed:</strong> This deliverable is scheduled for the specific quarter and has passed the final review process. There is a very low chance of this deliverable moving.</li>
+              <li><strong>Released:</strong> This deliverable has been released.</li>
+          </ul>
+
+          <h3>View Modes</h3>
+          <p>There are two view modes available for the roadmap: Edit View and Release View.</p>
+
+          <ul>
+              <li><strong>Edit View:</strong> allows you to modify and manage the roadmap. You can add or remove columns, categories, and entries. It is designed for users who have permission to edit and control the project roadmap.</li>
+              <li><strong>Release View:</strong> shows the roadmap without editing capabilities. This view can be shared with stakeholders or team members who do not need to modify the roadmap but only view it. In this mode, all editing options are disabled to prevent accidental changes.</li>
+          </ul>
+
+          <h3>Settings Access</h3>
+          <p>In <strong>Edit View</strong>, you have access to a <strong>Settings Panel</strong> that allows you to configure various aspects of the dashboard and roadmap.</p>
+
+          <ul>
+              <li><strong>Dashboard Settings:</strong> 
+                  <p>In this section, you can customize the appearance of the dashboard background via uploading a background image or selecting a color gradient. Additionally, you can choose different color schemes for deliverables like Released, Tentative, and Committed statuses, as well as for the sidebar, buttons, and text elements on the dashboard.</p>
+              </li>
+              <li><strong>Modals Settings:</strong> 
+                  <p>This section allows you to configure the appearance of modals used across the roadmap. You can change the background color of modals, their content areas, and buttons. There’s also an option to customize the color of the status ribbon and modal text.</p>
+              </li>
+              <li><strong>Limits Settings:</strong> 
+                  <p>In the Limits section, you can define constraints on how many columns, categories, and entries can be added to the roadmap. These settings allow you to restrict the number of items at various levels to ensure manageability and control over the roadmap's size.</p>
+              </li>
+              <li><strong>Versioning Settings:</strong> 
+                  <p>This section lets you manage versioning information. You can set the last release date and update the current live version of the roadmap. The updated information will be reflected in relevant areas of the dashboard.</p>
+              </li>
+          </ul>
+
+          <h3>Reset and Apply Changes</h3>
+          <p>The <strong>Reset All</strong> button restores all settings to their default values, including dashboard appearance, modal colors, limits, and versioning. The <strong>Apply All</strong> button saves the changes you made across all the settings and applies them to the current roadmap view.</p>
+
+          <h3>Save & Load Feature Status</h3>
+          <p><strong>Warning:</strong> Save & Load functionality is currently under development. Reloading or navigating away from the page will result in the loss of all content. The initial implementation will utilize local storage, with future enhancements planned for server-side storage and database integration. At this stage, the tool serves as a proof of concept."</p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="caveats-modal-footer">
+            <button id="closeRoadmapCaveatsPopup" class="caveats-confirm-button">I GOT IT!</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Settings Modal Structure -->
+  <div id="settingsmodal" class="modal">
+    <div class="settings-modal-content">
+
+      <!-- Sidebar Menu -->
+      <div class="settings-sidebar">
+        <ul>
+          <li id="dashboard-settings-tab" class="active">Dashboard Settings</li>
+          <li id="modals-settings-tab">Modals Settings</li>
+          <li id="limits-settings-tab">Limits Settings</li>
+          <li id="versioning-settings-tab">Versioning Settings</li>
+        </ul>
+      </div>
+
+      <!-- Dashboard Settings Content -->
+      <div class="settings-body" id="dashboard-settings">
+        <h2>Dashboard Settings</h2>
+
+        <!-- Dashboard Background Image -->
+        <div class="setting-item">
+          <label>Dashboard Background Image:</label>
+          <div class="file-upload-wrapper">
+            <label for="backgroundImageInput" class="custom-upload-button">Upload Image</label>
+            <input type="file" id="backgroundImageInput" class="file-input" />
+            <img id="imagePreview" src="" alt="Preview" style="display: none; width: 100px; height: 100px; margin-top: 10px;" />
+            <button id="removeBackgroundImageButton" style="display: none; margin-left: 10px;">X</button>
+          </div>
+          <div class="gradient-background">
+            <div class="checkbox-container">
+              <input type="checkbox" id="applyGradientCheckbox">
+              <label for="applyGradientCheckbox">Or choose a gradient: </label>
+            </div>
+            <input type="color" id="gradientColor1" value="#141e30">
+            <input type="color" id="gradientColor2" value="#324d64">
+          </div>
+        </div>
+
+        <!-- Deliverables Colors -->
+        <div class="setting-item">
+          <label>Deliverables Colors:</label>
+          <div class="color-options">
+            <div class="released-colors">
+              <span>Released:</span>
+              <div class="color-swatch" data-status="released" style="background-color: rgb(22, 70, 100);"></div>
+            </div>
+            <div class="tentative-colors">
+              <span>Tentative:</span>
+              <div class="color-swatch" data-status="tentative" style="background-color: #0b0c10;"></div>
+            </div>
+            <div class="committed-colors">
+              <span>Committed:</span>
+              <div class="color-swatch" data-status="committed" style="background-color: rgba(28, 51, 63, 0.7);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Color -->
+        <div class="setting-item" id="category-color">
+          <label>Category Color:</label>
+          <div class="color-options" id="category-color-options">
+            <div class="color-swatch" data-element="category" style="background-color: #1f2833;"></div>
+          </div>
+        </div>
+
+        <!-- Entry Color -->
+        <div class="setting-item">
+          <label>Entry Color:</label>
+          <div class="color-options" id="entry-color-options">
+            <div class="color-swatch" data-element="entry" style="background-color: #45a29e;"></div>
+          </div>
+        </div>
+
+        <!-- Sidebar Color -->
+        <div class="setting-item">
+          <label>Sidebar Color:</label>
+          <div class="color-options" id="sidebar-color-options">
+            <div class="color-swatch" data-element="sidebar" style="background-color: #1f2833;"></div>
+          </div>
+        </div>
+
+        <!-- Global Button Colors -->
+        <div class="setting-item">
+          <label>Global Button Colors:</label>
+          <div class="color-options" id="button-color-options">
+            <div class="color-swatch" data-element="global" style="background-color: #45a29e;"></div>
+          </div>
+        </div>
+
+        <!-- Global Button Text Color -->
+        <div class="setting-item">
+          <label>Global Text Color:</label>
+          <div class="color-options" id="text-color-options">
+            <div class="color-swatch" data-element="button-text" style="background-color: #ffffff;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modals Settings Content -->
+      <div id="modals-settings" class="settings-body" style="display: none;">
+        <h2>Modals Settings</h2>
+
+        <!-- Modal Background Color -->
+        <div class="setting-item">
+          <label>Modal Background Color:</label>
+          <div class="color-options">
+            <div class="color-swatch" data-element="modal-background" style="background-color: #1f2833;"></div>
+          </div>
+        </div>
+
+        <!-- Modal Content Background Color -->
+        <div class="setting-item">
+          <label>Modal Content Background Color:</label>
+          <div class="color-options">
+            <div class="color-swatch" data-element="modal-content-background" style="background-color: #0b0c10;"></div>
+          </div>
+        </div>
+
+        <!-- Modal Buttons Color -->
+        <div class="setting-item">
+          <label>Modal Buttons Color:</label>
+          <div class="color-options">
+            <div class="color-swatch" data-element="modal-buttons" style="background-color: #45a29e;"></div>
+          </div>
+        </div>
+
+        <!-- Status Ribbon Color -->
+        <div class="setting-item">
+          <label>Modal Status Ribbon Color:</label>
+          <div class="color-options">
+            <div class="color-swatch" data-element="status-ribbon" style="background-color: #45a29e;"></div>
+          </div>
+        </div>
+
+        <!-- Modal Text Color -->
+        <div class="setting-item">
+          <label>Modal Text Color:</label>
+          <div class="color-options">
+            <div class="color-swatch" data-element="modal-text" style="background-color: #fff;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Limits Settings Content -->
+      <div id="limits-settings" class="settings-body" style="display: none;">
+        <h2>Limits Settings</h2>
+
+        <!-- Limit Columns -->
+        <div class="setting-item-limits">
+          <div class="setting-label">
+            <label>Limit Columns:</label>
+          </div>
+          <div class="setting-toggle">
+            <label class="switch">
+              <input type="checkbox" id="toggleLimitColumns">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-input">
+            <input type="number" id="columnLimitInput" placeholder="Max Columns" min="1" disabled>
+          </div>
+        </div>
+
+        <!-- Limit Categories in Column -->
+        <div class="setting-item-limits">
+          <div class="setting-label">
+            <label>Limit Categories in Column:</label>
+          </div>
+          <div class="setting-toggle">
+            <label class="switch">
+              <input type="checkbox" id="toggleLimitCategoriesInColumn">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-input">
+            <input type="number" id="categoryLimitInColumnInput" placeholder="Max Categories per Column" min="1" disabled>
+          </div>
+        </div>
+
+        <!-- Limit All Categories -->
+        <div class="setting-item-limits">
+          <div class="setting-label">
+            <label>Limit All Categories:</label>
+          </div>
+          <div class="setting-toggle">
+            <label class="switch">
+              <input type="checkbox" id="toggleLimitAllCategories">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-input">
+            <input type="number" id="allCategoriesLimitInput" placeholder="Max All Categories" min="1" disabled>
+          </div>
+        </div>
+
+        <!-- Limit Entries in Category -->
+        <div class="setting-item-limits">
+          <div class="setting-label">
+            <label>Limit Entries in Category:</label>
+          </div>
+          <div class="setting-toggle">
+            <label class="switch">
+              <input type="checkbox" id="toggleLimitEntriesInCategory">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-input">
+            <input type="number" id="entriesLimitInCategoryInput" placeholder="Max Entries per Category" min="1" disabled>
+          </div>
+        </div>
+
+        <!-- Limit All Entries -->
+        <div class="setting-item-limits">
+          <div class="setting-label">
+            <label>Limit All Entries:</label>
+          </div>
+          <div class="setting-toggle">
+            <label class="switch">
+              <input type="checkbox" id="toggleLimitAllEntries">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-input">
+            <input type="number" id="allEntriesLimitInput" placeholder="Max All Entries" min="1" disabled>
+          </div>
+        </div>
+      </div>
+
+      <!-- Versioning Settings Content -->
+      <div id="versioning-settings" class="settings-body" style="display: none;">
+        <h2>Versioning Settings</h2>
+
+        <!-- Last Release Date Picker -->
+        <div class="versioning-item">
+          <label for="lastReleaseDate">Last Release:</label>
+          <input type="date" id="lastReleaseDate" />
+        </div>
+
+        <!-- Current Live Version Input -->
+        <div class="versioning-item">
+          <label for="liveVersionInput">Current Live Version:</label>
+          <input type="text" id="liveVersionInput" maxlength="60" placeholder="Enter Current Live Version" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="settings-footer">
+      <button id="applyAllButton">Apply All</button>
+      <button id="resetButton">Reset</button>
+      <button id="closeSettingsButton">Close</button>
+    </div>
+  </div>
+
+<!-- Gear Icon Button for Opening Settings -->
+<img src="https://raw.githubusercontent.com/razvanpf/Images/main/gearicon.png" id="settingsButton" style="position: fixed; top: 10px; right: 10px; cursor: pointer; width: 40px; z-index: 99999;">
+
+  <!-- Color Picker Modal -->
+  <div id="colorPickerModal" class="color-picker-modal" style="display: none;">
+    <div class="color-picker-content">
+        <h3>Select a Color</h3>
+        <div class="preset-colors">
+            <div class="preset-color" data-color="#0b0c10" style="background-color: #0b0c10;"></div>  
+            <div class="preset-color" data-color="#1B263B" style="background-color: #1B263B;"></div>
+            <div class="preset-color" data-color="#1f2833" style="background-color: #1f2833;"></div>
+            <div class="preset-color" data-color="#525174" style="background-color: #525174;"></div>
+            <div class="preset-color" data-color="#4C5B5C" style="background-color: #4C5B5C;"></div>
+            <div class="preset-color" data-color="rgb(22, 70, 100)" style="background-color: rgb(22, 70, 100);"></div>
+            <div class="preset-color" data-color="rgba(28, 51, 63, 0.7)" style="background-color: rgba(28, 51, 63, 0.7);"></div>
+            <div class="preset-color" data-color="#20639B" style="background-color: #20639B;"></div>
+            <div class="preset-color" data-color="#2D6A4F" style="background-color: #2D6A4F;"></div>
+            <div class="preset-color" data-color="#45a29e" style="background-color: #45a29e;"></div>
+            <div class="preset-color" data-color="#FFFFFF" style="background-color: #FFFFFF;"></div>
+        </div>
+        <button id="closeColorPicker">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
